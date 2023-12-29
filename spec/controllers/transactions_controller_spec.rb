@@ -1,6 +1,40 @@
 require 'rails_helper'
 
 RSpec.describe TransactionsController, type: :request do
+  describe '/transactions' do
+    context 'happycase' do
+      before do
+        FactoryBot.create(:transaction, reference: "Reference: AT232030006000010464975")
+        FactoryBot.create(:transaction, reference: "Reference: AT232030006000010410850")
+        FactoryBot.create(:transaction, reference: "Reference: AT232030006000010410850")
+      end
+
+      it 'returns all transactions' do
+        get transactions_path
+        body = JSON.parse(response.body)
+        expect(body.count).to eq(3)
+      end
+
+      it 'accepts pagination parameters' do
+        get transactions_path, params: { page: 1, page_size: 25, order_by: 'id', order: 'desc' }
+        body = JSON.parse(response.body)
+        expect(body.count).to eq(3)
+      end
+
+      it 'returns 0 results for the last page' do
+        get transactions_path, params: { page: 2, page_size: 25, order_by: 'id', order: 'desc' }
+        body = JSON.parse(response.body)
+        expect(body.count).to eq(0)
+      end
+
+      it 'restricts the result size according to the page_size' do
+        get transactions_path, params: { page: 1, page_size: 2, order_by: 'id', order: 'asc' }
+        body = JSON.parse(response.body)
+        expect(body.count).to eq(2)
+      end
+    end
+  end
+
   describe '/transactions/import' do
     let(:filename) { 'valid.csv' }
     let!(:file) { fixture_file_upload(filename) }
