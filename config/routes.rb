@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  resources :transactions do
+  resource :transactions do
     post '/import', to: 'transactions#import_transactions'
   end
 end
