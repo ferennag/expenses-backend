@@ -8,7 +8,11 @@ class TransactionsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       transactions.each do |transaction|
-        transaction.save!
+        Transaction.find_or_create_by!(reference: transaction[:reference]) do |t|
+          t.date = transaction[:date]
+          t.amount = transaction[:amount]
+          t.memo = transaction[:memo]
+        end
       end
     end
 
