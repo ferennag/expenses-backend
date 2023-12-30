@@ -13,6 +13,13 @@ RSpec.describe TransactionsController, type: :request do
         get transactions_path
         body = JSON.parse(response.body)
         expect(body.count).to eq(3)
+
+        body.each do |item|
+          expect(item.key? 'amount').to be_truthy
+          expect(item.key? 'date').to be_truthy
+          expect(item.key? 'memo').to be_truthy
+          expect(item.key? 'reference').to be_truthy
+        end
       end
 
       it 'accepts pagination parameters' do

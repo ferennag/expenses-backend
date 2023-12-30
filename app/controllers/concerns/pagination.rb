@@ -6,7 +6,7 @@ module Pagination
   DEFAULT_ORDER = :desc
 
   included do
-    def setup_pagination
+    def allow_pagination
       # TODO add validation of these parameters
       approved_params = params.permit(:page, :page_size, :order_by, :order)
       @page = approved_params[:page] || 1

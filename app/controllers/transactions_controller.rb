@@ -3,7 +3,7 @@ require 'csv'
 class TransactionsController < ApplicationController
   include Pagination
 
-  before_action :setup_pagination, only: [:show]
+  before_action :allow_pagination, only: [:show]
 
   def show
     render json: Transaction.order(@order_by => @order).page(@page).per(@page_size)
