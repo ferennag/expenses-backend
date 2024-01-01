@@ -7,6 +7,11 @@ class ApplicationController < ActionController::API
 
   protected
 
+  def authenticated_user
+    raise UnAuthorized, "Unauthorized" if @user.nil?
+    @user
+  end
+
   def unauthorized(ex)
     render json: { error: ex.message }, status: :unauthorized
   end
