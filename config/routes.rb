@@ -8,6 +8,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  scope :auth do
+    post '/login', to: "auth#login"
+    post '/logout', to: "auth#logout"
+    post '/refresh', to: "auth#refresh"
+  end
+
   resource :transactions do
     post '/import', to: 'transactions#import_transactions'
   end

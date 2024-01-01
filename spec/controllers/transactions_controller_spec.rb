@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe TransactionsController, type: :request do
+  include ControllerSpecHelpers
+
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:headers) { stub_auth_headers(user.email) }
+
   describe '/transactions' do
     context 'happycase' do
       before do
@@ -10,7 +15,7 @@ RSpec.describe TransactionsController, type: :request do
       end
 
       it 'returns all transactions' do
-        get transactions_path
+        get transactions_path, headers: headers
         body = JSON.parse(response.body)
         expect(body.count).to eq(3)
 
@@ -23,19 +28,19 @@ RSpec.describe TransactionsController, type: :request do
       end
 
       it 'accepts pagination parameters' do
-        get transactions_path, params: { page: 1, page_size: 25, order_by: 'id', order: 'desc' }
+        get transactions_path, params: { page: 1, page_size: 25, order_by: 'id', order: 'desc' }, headers: headers
         body = JSON.parse(response.body)
         expect(body.count).to eq(3)
       end
 
       it 'returns 0 results for the last page' do
-        get transactions_path, params: { page: 2, page_size: 25, order_by: 'id', order: 'desc' }
+        get transactions_path, params: { page: 2, page_size: 25, order_by: 'id', order: 'desc' }, headers: headers
         body = JSON.parse(response.body)
         expect(body.count).to eq(0)
       end
 
       it 'restricts the result size according to the page_size' do
-        get transactions_path, params: { page: 1, page_size: 2, order_by: 'id', order: 'asc' }
+        get transactions_path, params: { page: 1, page_size: 2, order_by: 'id', order: 'asc' }, headers: headers
         body = JSON.parse(response.body)
         expect(body.count).to eq(2)
       end
@@ -50,7 +55,7 @@ RSpec.describe TransactionsController, type: :request do
       it 'imports the file successfully' do
         expect(Transaction.count).to eq(0)
 
-        post import_transactions_path, params: { file: file }
+        post import_transactions_path, params: { file: file }, headers: headers
         body = JSON.parse(response.body)
         expect(body["status"]).to eq("success")
 
@@ -67,7 +72,7 @@ RSpec.describe TransactionsController, type: :request do
       it 'doesnt duplicate transactions' do
         expect(Transaction.count).to eq(2)
 
-        post import_transactions_path, params: { file: file }
+        post import_transactions_path, params: { file: file }, headers: headers
         body = JSON.parse(response.body)
         expect(body["status"]).to eq("success")
 
@@ -79,7 +84,7 @@ RSpec.describe TransactionsController, type: :request do
       it 'returns an error response' do
         expect(Transaction.count).to eq(0)
 
-        post import_transactions_path
+        post import_transactions_path, headers: headers
         body = JSON.parse(response.body)
         expect(body["status"]).to eq("failure")
 
@@ -93,7 +98,7 @@ RSpec.describe TransactionsController, type: :request do
       it 'returns an error response' do
         expect(Transaction.count).to eq(0)
 
-        post import_transactions_path, params: { file: file }
+        post import_transactions_path, params: { file: file }, headers: headers
         body = JSON.parse(response.body)
         expect(body["status"]).to eq("failure")
 
@@ -107,7 +112,7 @@ RSpec.describe TransactionsController, type: :request do
       it 'returns an error response' do
         expect(Transaction.count).to eq(0)
 
-        post import_transactions_path, params: { file: file }
+        post import_transactions_path, params: { file: file }, headers: headers
         body = JSON.parse(response.body)
         expect(body["status"]).to eq("failure")
 
@@ -119,7 +124,7 @@ RSpec.describe TransactionsController, type: :request do
       it 'returns an error response' do
         expect(Transaction.count).to eq(0)
 
-        post import_transactions_path, params: { incorrect_name: file }
+        post import_transactions_path, params: { incorrect_name: file }, headers: headers
         body = JSON.parse(response.body)
         expect(body["status"]).to eq("failure")
 
