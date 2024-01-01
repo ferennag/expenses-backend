@@ -33,14 +33,14 @@ RSpec.describe WorkspacesController, type: :request do
     context 'trying to get another user\'s workspace' do
       let!(:other_user) { FactoryBot.create(:user, email: 'other-user@example.com') }
 
-      it 'returns 404 response' do
+      it 'returns 403 response' do
         # user's own workspace
         get workspace_path(user.workspaces.first.id), headers: headers
         expect(response.status).to eq(200)
 
         # another user's workspace, I shouldn't be able to see it
         get workspace_path(other_user.workspaces.first.id), headers: headers
-        expect(response.status).to eq(404)
+        expect(response.status).to eq(403)
       end
     end
   end

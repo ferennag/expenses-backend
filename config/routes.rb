@@ -15,9 +15,10 @@ Rails.application.routes.draw do
   end
 
   resources :workspaces do
-  end
+    resources :accounts do
+      post '/transactions/import', to: 'transactions#import_transactions'
 
-  resource :transactions do
-    post '/import', to: 'transactions#import_transactions'
+      resources :transactions
+    end
   end
 end

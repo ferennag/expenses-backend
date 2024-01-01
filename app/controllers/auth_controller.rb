@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  skip_before_action :authorize, only: [:login]
+  skip_before_action :authorization, only: [:login]
 
   def login
     email, password = params.require([:email, :password])

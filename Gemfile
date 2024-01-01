@@ -50,3 +50,6 @@ group :development do
 end
 
 gem "kaminari"
+gem "pundit", "~> 2.3"
+
+gem "annotate", "~> 3.2"
