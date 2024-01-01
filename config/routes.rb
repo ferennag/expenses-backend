@@ -14,6 +14,9 @@ Rails.application.routes.draw do
     post '/refresh', to: "auth#refresh"
   end
 
+  resources :workspaces do
+  end
+
   resource :transactions do
     post '/import', to: 'transactions#import_transactions'
   end
