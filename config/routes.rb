@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     post '/refresh', to: "auth#refresh"
   end
 
+  scope '/user' do
+    get '/profile', to: 'user#profile'
+  end
+
   resources :workspaces do
     resources :accounts do
       post '/transactions/import', to: 'transactions#import_transactions'

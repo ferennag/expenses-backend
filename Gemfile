@@ -53,3 +53,5 @@ gem "kaminari"
 gem "pundit", "~> 2.3"
 
 gem "annotate", "~> 3.2"
+
+gem "blueprinter", "~> 0.30.0"

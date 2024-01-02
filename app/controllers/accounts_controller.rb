@@ -7,6 +7,6 @@ class AccountsController < ApplicationController
     accounts = policy_scope(Account)
     accounts = accounts.where(workspace_id: workspace_id)
 
-    render json: accounts
+    render json: AccountBlueprint.render(accounts)
   end
 end

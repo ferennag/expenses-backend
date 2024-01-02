@@ -10,7 +10,8 @@ class TransactionsController < ApplicationController
     account_id = params.require(:account_id)
     transactions = policy_scope(Transaction)
     transactions = transactions.where(account_id: account_id).where(account: { workspace_id: workspace_id })
-    render json: transactions.order(@order_by => @order).page(@page).per(@page_size)
+    transactions = transactions.order(@order_by => @order).page(@page).per(@page_size)
+    render json: TransactionBlueprint.render(transactions)
   end
 
   def import_transactions
