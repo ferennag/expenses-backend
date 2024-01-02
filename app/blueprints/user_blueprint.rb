@@ -3,5 +3,7 @@ class UserBlueprint < Blueprinter::Base
 
   fields :email
 
-  association :workspaces, blueprint: WorkspaceBlueprint, view: :full
+  view :full do
+    association :workspaces, blueprint: WorkspaceBlueprint, view: :full
+  end
 end
