@@ -7,11 +7,11 @@ class WorkspacePolicy < ApplicationPolicy
   end
 
   def index?
-    workspace.users.include? @user
+    @user.workspaces.include? @workspace
   end
 
   def show?
-    workspace.users.include? @user
+    @user.workspaces.include? @workspace
   end
 
   def create?
@@ -19,11 +19,11 @@ class WorkspacePolicy < ApplicationPolicy
   end
 
   def update?
-    workspace.users.include? @user
+    @user.workspaces.include? @workspace
   end
 
   def destroy?
-    workspace.users.include? @user
+    @user.workspaces.include? @workspace
   end
 
   class Scope

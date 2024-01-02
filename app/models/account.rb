@@ -20,6 +20,7 @@
 #
 class Account < ApplicationRecord
   belongs_to :workspace
-
   has_many :transactions
+
+  scope :eager, -> { eager_load(:workspace) }
 end

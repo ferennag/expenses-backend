@@ -7,31 +7,23 @@ class AccountPolicy < ApplicationPolicy
   end
 
   def index?
-    @record.workspace.users.include? @user
+    @user.workspaces.include? record.workspace
   end
 
   def show?
-    @record.workspace.users.include? @user
+    @user.workspaces.include? record.workspace
   end
 
   def create?
     true
   end
 
-  def new?
-    create?
-  end
-
   def update?
-    @record.workspace.users.include? @user
-  end
-
-  def edit?
-    update?
+    @user.workspaces.include? record.workspace
   end
 
   def destroy?
-    @record.workspace.users.include? @user
+    @user.workspaces.include? record.workspace
   end
 
   class Scope
@@ -41,7 +33,7 @@ class AccountPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.joins(:workspace).joins(workspace: :users).where(workspace: { users: @user })
+      scope.includes(workspace: :users).where(workspace: { users: @user })
     end
 
     private

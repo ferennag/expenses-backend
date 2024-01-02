@@ -22,7 +22,7 @@ module AuthenticationConcern
       token = decoded_token
       raise UnAuthenticated, "UnAuthenticated" unless token.present?
 
-      @user = User.joins(workspaces: :accounts).find_by_email(token[0]['email'])
+      @user = User.strict_loading.eager_load(workspaces: :accounts).find_by_email(token[0]['email'])
       raise UnAuthenticated, "UnAuthenticated" unless @user.present?
     end
 
