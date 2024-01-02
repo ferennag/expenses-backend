@@ -9,4 +9,7 @@ class AccountsController < ApplicationController
 
     render json: AccountBlueprint.render(accounts)
   end
+
+  # TODO
+  # Add ability to show, create, update, and delete accounts
 end

@@ -43,4 +43,9 @@ class TransactionsController < ApplicationController
     Rails.logger.error(error)
     render json: { status: :failure }
   end
+
+  # TODO Transaction improvements needed:
+  # - Allow creating, updating, and deleting transactions one by one
+  # - Allow categorizing a single transaction
+  # - Allow categorizing transactions in bulk
 end

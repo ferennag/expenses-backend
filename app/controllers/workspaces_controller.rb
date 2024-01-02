@@ -10,4 +10,6 @@ class WorkspacesController < ApplicationController
     authorize workspace
     render json: WorkspaceBlueprint.render(workspace)
   end
+
+  # TODO add ability to create, update, delete a workspace
 end

@@ -15,4 +15,11 @@ class AuthController < ApplicationController
   def logout
     render json: { message: "Success" }
   end
+
+  # TODO auth improvements needed
+  # - Setup email sending
+  # - Setup email confirmation process
+  # - Store jwt tokens for users, and allow revoking specific sessions of users. Revoked tokens shouldn't be able to be used
+  # - Experiment with token expiration. how would that work with mobile/desktop applications without forcing the user to log in all the time
+  # - Store info about the login device. If it's an unknown device, send notification to users
 end
