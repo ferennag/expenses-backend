@@ -1,27 +1,24 @@
 require 'csv'
 
-class TransactionsController < ApplicationController
+class TransactionsController < AccountBaseController
   include Pagination
 
   before_action :allow_pagination, only: [:index]
 
   def index
-    workspace_id = params.require(:workspace_id)
-    account_id = params.require(:account_id)
+    load_account
+    load_workspace
+
     transactions = policy_scope(Transaction)
-    transactions = transactions.where(account_id: account_id).where(account: { workspace_id: workspace_id })
+    transactions = transactions.where(account_id: @account.id).where(account: { workspace_id: @workspace.id })
     transactions = transactions.order(@order_by => @order).page(@page).per(@page_size)
     render json: TransactionBlueprint.render(transactions)
   end
 
   def import_transactions
-    workspace_id = params.require(:workspace_id)
-    workspace = Workspace.find(workspace_id)
-    account_id = params.require(:account_id)
-    account = Account.find(account_id)
+    load_workspace :update?
+    load_account :update?
 
-    authorize workspace, :update?
-    authorize account, :update?
     authorize Transaction, :create?
 
     uploaded_file = params.require(:file)
@@ -33,7 +30,7 @@ class TransactionsController < ApplicationController
           t.date = transaction[:date]
           t.amount = transaction[:amount]
           t.memo = transaction[:memo]
-          t.account = account
+          t.account = @account
         end
       end
     end

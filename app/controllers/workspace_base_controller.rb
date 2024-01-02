@@ -7,9 +7,13 @@ class WorkspaceBaseController < ApplicationController
     :workspace_id
   end
 
-  def load_workspace
+  def load_workspace(authorization_query = nil)
     workspace_id = params.require(workspace_id_param)
     workspace = Workspace.find(workspace_id)
-    @workspace = authorize workspace
+    if authorization_query
+      @workspace = authorize workspace, authorization_query
+    else
+      @workspace = authorize workspace
+    end
   end
 end
