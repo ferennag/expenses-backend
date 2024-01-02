@@ -14,7 +14,6 @@ class TransactionsController < ApplicationController
   end
 
   def import_transactions
-    # TODO authentication
     workspace_id = params.require(:workspace_id)
     workspace = Workspace.find(workspace_id)
     account_id = params.require(:account_id)
@@ -22,6 +21,7 @@ class TransactionsController < ApplicationController
 
     authorize workspace, :update?
     authorize account, :update?
+    authorize Transaction, :create?
 
     uploaded_file = params.require(:file)
     transactions = CsvImportService.new.import_file(uploaded_file.path)
