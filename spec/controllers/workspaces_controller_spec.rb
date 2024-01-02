@@ -17,6 +17,71 @@ RSpec.describe WorkspacesController, type: :request do
     end
   end
 
+  describe 'create' do
+    before do
+      post workspaces_path, headers: headers, params: post_body
+      begin
+        @body = JSON.parse(response.body)
+      rescue JSON::ParserError
+        # Ignored
+      end
+    end
+
+    context 'happycase' do
+      let!(:post_body) { { name: 'test', description: 'test dsc' } }
+
+      it 'creates a workspace and returns it in the response' do
+        expect(response.status).to eq(200)
+        expect(@body['name']).to eq(post_body[:name])
+        expect(@body['description']).to eq(post_body[:description])
+        expect(@body.key? 'id').to eq(true)
+      end
+    end
+
+    context 'can create a workspace without a description' do
+      let!(:post_body) { { name: 'test' } }
+
+      it 'creates the workspace without a description' do
+        expect(@body['name']).to eq(post_body[:name])
+        expect(@body['description']).to be_nil
+        expect(@body.key? 'id').to eq(true)
+      end
+    end
+
+    context 'cannot create a workspace without a name' do
+      let!(:post_body) { { description: 'test' } }
+
+      it 'throws a HTTP 422 unprocessable entity error' do
+        expect(response.status).to eq(422)
+      end
+    end
+  end
+
+  describe 'update' do
+    let!(:workspace) { user.workspaces.first }
+
+    before do
+      put workspace_path(workspace.id), headers: headers, params: post_body
+      begin
+        @body = JSON.parse(response.body)
+      rescue JSON::ParserError
+        # Ignored
+      end
+    end
+
+    context 'happycase' do
+      let!(:post_body) { { name: 'test', description: 'test dsc' } }
+
+      it 'updates a workspace and returns it in the response' do
+        expect(response.status).to eq(200)
+        expect(@body['name']).to eq(post_body[:name])
+        expect(@body['description']).to eq(post_body[:description])
+        workspace.reload
+        expect(@body['id']).to eq(workspace.id)
+      end
+    end
+  end
+
   describe 'show' do
     context 'happycase' do
       it 'returns all of the user\'s workspaces' do

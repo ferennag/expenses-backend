@@ -13,4 +13,6 @@ class Workspace < ApplicationRecord
   has_many :users, through: :user_workspaces
   has_many :accounts
   has_many :categories
+
+  validates :name, :presence => true
 end
