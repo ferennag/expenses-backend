@@ -38,7 +38,7 @@ class TransactionsController < AccountBaseController
     render json: { status: :success }
   rescue StandardError => error
     Rails.logger.error(error)
-    render json: { status: :failure }
+    render json: { status: :failure }, status: :internal_server_error
   end
 
   # TODO Transaction improvements needed:

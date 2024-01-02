@@ -6,20 +6,23 @@ RSpec.describe WorkspacesController, type: :request do
   let!(:user) { FactoryBot.create(:user) }
   let!(:headers) { stub_auth_headers(user.email) }
 
-  describe '/workspaces' do
+  describe 'index' do
     context 'happycase' do
       it 'returns all of the user\'s workspaces' do
         get workspaces_path, headers: headers
         expect(response.status).to eq(200)
+        body = response.body
+        expect(body).to eq(WorkspaceBlueprint.render(user.workspaces))
       end
     end
   end
 
-  describe '/workspaces/<id>' do
+  describe 'show' do
     context 'happycase' do
       it 'returns all of the user\'s workspaces' do
         get workspace_path(user.workspaces.first.id), headers: headers
         expect(response.status).to eq(200)
+        expect(body).to eq(WorkspaceBlueprint.render(user.workspaces.first))
       end
     end
 

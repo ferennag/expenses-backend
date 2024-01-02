@@ -1,12 +1,6 @@
-class AccountsController < WorkspaceBaseController
-  before_action :load_workspace
-
-  def show
-    account = Account.find(params.require(:id))
-    authorize account
-
-    render json: AccountBlueprint.render(account)
-  end
+class AccountsController < AccountBaseController
+  before_action :load_workspace, except: [:create]
+  before_action :load_account, except: [:index, :create]
 
   def index
     accounts = policy_scope(Account)
@@ -16,6 +10,7 @@ class AccountsController < WorkspaceBaseController
   end
 
   def create
+    load_workspace :update?
     authorize Account, :create?
 
     name, description = params.require([:name, :description])
@@ -24,14 +19,22 @@ class AccountsController < WorkspaceBaseController
     render json: AccountBlueprint.render(account)
   end
 
-  def update
-    account = Account.eager.find(params.require(:id))
-    authorize account
-    account.update(params.permit([:name, :description]))
+  def show
+    render json: AccountBlueprint.render(@account)
+  end
 
-    render json: AccountBlueprint.render(account)
+  def update
+    @account.update(params.permit([:name, :description]))
+
+    render json: AccountBlueprint.render(@account)
   end
 
   # TODO
   # Add ability to delete accounts. Deletion should only be an archiving, and users should be able to restore it later
+
+  protected
+
+  def account_id_param
+    :id
+  end
 end

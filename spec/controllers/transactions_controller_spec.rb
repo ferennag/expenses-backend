@@ -144,7 +144,7 @@ RSpec.describe TransactionsController, type: :request do
 
         post workspace_account_transactions_import_path(other_workspace_id, account_id), params: { file: file }, headers: headers
         body = JSON.parse(response.body)
-        # expect(response.status).to eq(403)
+        expect(response.status).to eq(500)
         expect(body["status"]).to eq("failure")
 
         expect(Transaction.count).to eq(0)
@@ -155,7 +155,7 @@ RSpec.describe TransactionsController, type: :request do
 
         post workspace_account_transactions_import_path(workspace_id, other_account_id), params: { file: file }, headers: headers
         body = JSON.parse(response.body)
-        # expect(response.status).to eq(403)
+        expect(response.status).to eq(500)
         expect(body["status"]).to eq("failure")
 
         expect(Transaction.count).to eq(0)
