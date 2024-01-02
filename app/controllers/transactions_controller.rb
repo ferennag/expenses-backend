@@ -4,11 +4,10 @@ class TransactionsController < AccountBaseController
   include Pagination
 
   before_action :allow_pagination, only: [:index]
+  before_action :load_workspace, except: [:import_transactions]
+  before_action :load_account, except: [:import_transactions]
 
   def index
-    load_account
-    load_workspace
-
     transactions = policy_scope(Transaction)
     transactions = transactions.where(account_id: @account.id).where(account: { workspace_id: @workspace.id })
     transactions = transactions.order(@order_by => @order).page(@page).per(@page_size)
