@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_02_193629) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_02_195641) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -75,6 +75,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_02_193629) do
   end
 
   add_foreign_key "accounts", "workspaces"
+  add_foreign_key "categories", "categories", column: "parent"
   add_foreign_key "categories", "workspaces"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "categories"

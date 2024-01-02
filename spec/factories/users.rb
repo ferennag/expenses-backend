@@ -22,6 +22,7 @@ FactoryBot.define do
 
     after :create do |user|
       create_list :account, 2, workspace: user.workspaces.first
+      create_list :category, 2, workspace: user.workspaces.first
     end
   end
 end

@@ -16,11 +16,14 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (parent => categories.id)
 #  fk_rails_...  (workspace_id => workspaces.id)
 #
 FactoryBot.define do
+  sequence(:category_name) { |n| "Category #{n}" }
+
   factory :category do
-    name { "MyString" }
-    parent { "" }
+    name { generate(:category_name) }
+    parent {}
   end
 end
